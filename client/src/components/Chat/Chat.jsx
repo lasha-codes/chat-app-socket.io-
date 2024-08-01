@@ -19,6 +19,10 @@ const Chat = () => {
     socket.emit('join', { name, room }, ({ error }) => {
       alert(error)
     })
+
+    return () => {
+      socket.off()
+    }
   }, [ENDPOINT, window.location.search])
 
   return <div>Chat</div>

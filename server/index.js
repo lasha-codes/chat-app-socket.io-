@@ -23,9 +23,9 @@ io.on('connection', (socket) => {
 
     const error = true
 
-    if (error) {
-      callback({ error: 'error' })
-    }
+    // if (error) {
+    // callback({ error: 'error' })
+    // }
   })
 
   socket.on('disconnect', () => {
