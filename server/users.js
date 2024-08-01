@@ -5,7 +5,7 @@ const addUser = ({ id, name, room }) => {
   room = room.trim().toLowerCase()
 
   const existingUser = users.find((user) => {
-    user.room === room && user.name === name
+    return user.room === room && user.name === name
   })
 
   if (existingUser) {
@@ -16,6 +16,7 @@ const addUser = ({ id, name, room }) => {
 
   users.push(user)
 
+  console.log(users)
   return { user }
 }
 
