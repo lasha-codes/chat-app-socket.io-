@@ -4,14 +4,17 @@ import { useState, useEffect } from 'react'
 import queryString from 'query-string'
 import io from 'socket.io-client'
 
+let socket
 const Chat = () => {
   const [name, setName] = useState('')
   const [room, setRoom] = useState('')
+  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState([])
   const ENDPOINT = 'localhost:5000'
 
   useEffect(() => {
     const { name, room } = queryString.parse(window.location.search)
-    const socket = io(ENDPOINT)
+    socket = io(ENDPOINT)
 
     setName(name)
     setRoom(room)
@@ -25,7 +28,29 @@ const Chat = () => {
     }
   }, [ENDPOINT, window.location.search])
 
-  return <div>Chat</div>
+  useEffect(() => {
+    socket.on('message', (message) => {
+      setMessages([...messages, message])
+    })
+  }, [messages])
+
+  const sendMessage = (e) => {
+    e.preventDefault()
+    if (message) {
+      socket.emit('sendMessage', message, () => setMessage(''))
+    }
+  }
+
+  console.log(message, messages)
+
+  return (
+    <div className='outerContainer'>
+      <div className='container'>
+        <input value={message} onChange={(e) => setMessage(e.target.value)} />
+        <button onClick={sendMessage}>Send</button>
+      </div>
+    </div>
+  )
 }
 
 export default Chat
